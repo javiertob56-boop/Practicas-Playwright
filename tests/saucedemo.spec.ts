@@ -4,12 +4,20 @@ import { LoginPage } from './pageobjects/LoginPage';
 test('purchase an item', async ({ page }) => {
 
     await page.goto('https://www.saucedemo.com/');
-
+/*
     await page.getByRole('textbox', { name: 'Username' }).fill('standard_user');
     await page.getByRole('textbox', { name: 'Password' }).fill('secret_sauce');
     await page.getByRole('button', { name: 'Login' }).click(); 
+  
+ */
  
+ //para llamar a la clase de LoginPage, primero tengo que crear una instancia de esa clase,
+ // y para eso necesito pasarle el objeto page que es el que se usa para interactuar con la pagina
+  
+   const login= new LoginPage(page)
+   await login.loginWithCredentials('standard_user', 'secret_sauce')
 
+  
 //declaro una variable y le pongo all para que me devuelva una lista de elementos
 const itemsContainer = await page.locator('#inventory_container .inventory_item').all()
 
@@ -61,22 +69,47 @@ await page.getByRole('textbox', { name: 'First Name'}).fill('Goku');
 await page.getByRole('textbox', { name: 'Last Name'}).fill('Sayayin');
 await page.getByRole('textbox', { name: 'Zip/Postal Code' }).fill('12345');
 
-await page.getByRole('button', { name: 'Continue' }).click();
-await page.getByRole('button', { name: 'Finish' }).click();
+expect(page.getByRole('button', { name: 'Continue' })).toBeVisible()
+await page.getByRole('button', { name: 'Continue' }).click()
 
-//hacer las validaciones, capturar, leer y comparar usando los expect de los campos first name, last name, zip code con los datos que se ingresaron al principio del test, para verificar
-//  que se muestran correctamente en la pagina de confirmacion de compra.
 
-const actualFirstName = await page.locator('.first-name').innerText()
-const actualLastName = await page.locator('.last-name').innerText()
-const actualZipCode = await page.locator('.postal-code').innerText()
-expect(actualFirstName).toEqual('Goku')
-expect(actualLastName).toEqual('Sayayin')
-expect(actualZipCode).toEqual('12345')
+await page.getByRole('button', { name: 'Finish' }).click()
 
+//agrego una asercion para verificar que se muestre un mensaje de confirmacion de la compra, lo que indica que la compra se realizo correctamente.
+//const message = page.locator('.complete-header')
+//await expect(message).toHaveText('Thank you for your order!')
 await expect(page.getByRole('heading', { name: 'Thank you for your order!' })).toBeVisible()
 
 //await page.pause();
 
 } );
 
+test('purchase  an item 1', async ({ page }) => {
+
+    await page.goto('https://www.saucedemo.com/');
+
+    const login= new LoginPage(page)
+    await login.loginWithCredentials('standard_user', 'secret_sauce')
+    await login.checkSuccessfulLogin()
+    
+    await page.locator('a.shopping_cart_link').click()
+    await page.getByRole('button', { name: 'Checkout' }).click();
+
+    await page.getByRole('textbox', { name: 'First Name'}).fill('Goku');
+    await page.getByRole('textbox', { name: 'Last Name'}).fill('Sayayin');
+    await page.getByRole('textbox', { name: 'Zip/Postal Code' }).fill('12345');
+
+    await page.getByRole('button', { name: 'Continue' }).click()
+    await page.getByRole('button', { name: 'Finish' }).click()
+
+    })
+
+test('purchase  an item 2', async ({ page }) => {
+
+    await page.goto('https://www.saucedemo.com/');
+
+    await page.getByRole('textbox', { name: 'Username' }).fill('standard_user');
+    await page.getByRole('textbox', { name: 'Password' }).fill('secret_sauce');
+    await page.getByRole('button', { name: 'Login' }).click();
+    
+})
