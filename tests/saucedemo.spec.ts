@@ -104,12 +104,33 @@ test('purchase  an item 1', async ({ page }) => {
 
     })
 
-test('purchase  an item 2', async ({ page }) => {
+test('purchase  an item 2', async ({ page }, testInfo) => {
 
     await page.goto('https://www.saucedemo.com/');
+    
+    await page.getByRole('textbox', {name: 'Username'}).fill('standard_user');
+   // await page.screenshot({path: 'screenshots/login_username.png'});
+    await page.getByRole('textbox', {name: 'Password'}).fill('secret_sauce');
+    await page.getByRole('button', {name: 'Login'}).click();
 
+    //await page.screenshot({path: 'screenshots/login.png', fullPage: true});
+   // await page.locator("xpath=//algo").click();
+    
+    await testInfo.attach('login',  {
+        body: await page.screenshot(),
+        contentType: 'image/png'
+
+       } )
+
+});
+test('navigate ', async ({ page }) => {
+
+    await page.goto(process.env.URL)
+   // await page.pause();
+
+    /*
     await page.getByRole('textbox', { name: 'Username' }).fill('standard_user');
     await page.getByRole('textbox', { name: 'Password' }).fill('secret_sauce');
     await page.getByRole('button', { name: 'Login' }).click();
-    
+    */
 })
