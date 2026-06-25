@@ -3,13 +3,24 @@ import { test, expect } from '@playwright/test';
 test('test web table', async ({ page }) => {
 
     await page.goto('https://cosmocode.io/automation-practice-webtable/')
+/*
+    console.log('URL actual:', page.url());
+    await page.screenshot({ path: 'debug-tabla.png', fullPage: true });
+*/
+   // const tableContainer = page.locator("xpath=//table[@id='countries']")
+    const tableContainer = page.locator('#countries');
 
-    const tableContainer = page.locator("xpath=//table[@id='countries']")
+    await expect(tableContainer).toBeVisible({ timeout: 10000 });
+    const rows = tableContainer.locator('tbody tr');
+    const count = await rows.count();
 
-    await tableContainer.waitFor({ state: 'visible' });
+    console.log(`Cantidad de filas: ${count}`);
 
-    const rows = tableContainer.locator('tbody tr')
-    const count = await rows.count()
+
+   // await tableContainer.waitFor({ state: 'visible' });
+
+   // const rows = tableContainer.locator('tbody tr')
+   // const count = await rows.count()
 
     console.log('Cantidad de filas:', count)
 
