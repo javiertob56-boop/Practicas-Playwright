@@ -2,11 +2,14 @@ import { test, expect } from '@playwright/test';
 
 test('test web table', async ({ page }) => {
 
-    await page.goto('https://cosmocode.io/automation-practice-webtable/')
-/*
-    console.log('URL actual:', page.url());
-    await page.screenshot({ path: 'debug-tabla.png', fullPage: true });
-*/
+    await page.goto('https://cosmocode.io/automation-practice-webtable/',
+       { waitUntil: 'domcontentloaded' }
+  );
+    console.log('Status:', response?.status());
+    console.log('URL final:', page.url());
+ 
+     await page.screenshot({ path: 'test-results/debug-tabla.png', fullPage: true });
+
    // const tableContainer = page.locator("xpath=//table[@id='countries']")
     const tableContainer = page.locator('#countries');
 
